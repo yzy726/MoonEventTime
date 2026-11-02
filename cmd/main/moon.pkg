@@ -1,5 +1,0 @@
-// import {
-//   "Ag108/MoonEventTime" @lib,
-// }
-
-pkgtype(kind: "executable")

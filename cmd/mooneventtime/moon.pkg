@@ -1,0 +1,15 @@
+import {
+  "Ag108/MoonEventTime" @eventtime,
+  "Ag108/MoonEventTime/replay",
+  "moonbitlang/core/env",
+  "moonbitlang/core/buffer",
+  "moonbitlang/core/encoding/utf8",
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "native"
+
+options(
+  "native-stub": [ "io.c" ],
+)

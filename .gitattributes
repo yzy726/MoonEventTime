@@ -5,4 +5,5 @@ moon.mod text eol=lf
 moon.pkg text eol=lf
 *.yml text eol=lf
 *.py text eol=lf
+*.c text eol=lf
 .githooks/* text eol=lf
