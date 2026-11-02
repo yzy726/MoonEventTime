@@ -1,0 +1,2 @@
+{"type":"event","key":"a","timestamp_ms":"12000","value":"20"}
+{"type":"watermark","exclusive_ms":"60000"}

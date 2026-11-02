@@ -1,0 +1,6 @@
+import {
+  "Ag108/MoonEventTime" @eventtime,
+  "Ag108/MoonEventTime/replay",
+}
+
+pkgtype(kind: "executable")

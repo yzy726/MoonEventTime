@@ -20,3 +20,4 @@ docs/*ACCEPTANCE*.md
 docs/*验收*.md
 docs/*初验*.md
 docs/*终验*.md
+*.tmp
