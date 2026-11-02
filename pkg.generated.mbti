@@ -1,11 +1,72 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Ag108/MoonEventTime"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 
 // Errors
 
 // Types and methods
+pub struct Config {
+  size_ms : Int64
+  origin_ms : Int64
+  limits : Limits
+} derive(Eq, @debug.Debug)
+pub fn Config::assign(Self, Int64, String) -> Result[WindowId, StreamError]
+pub fn Config::equal(Self, Self) -> Bool
+pub fn Config::new(Int64, origin_ms? : Int64, limits? : Limits) -> Result[Self, StreamError]
+pub fn Config::not_equal(Self, Self) -> Bool
+pub fn Config::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Event {
+  key : String
+  timestamp_ms : Int64
+  value : Int64
+} derive(Eq, @debug.Debug)
+pub fn Event::equal(Self, Self) -> Bool
+pub fn Event::not_equal(Self, Self) -> Bool
+pub fn Event::to_repr(Self) -> @debug.Repr
+
+pub struct Limits {
+  max_active_windows : Int
+  max_key_bytes : Int
+  max_outputs : Int
+  max_snapshot_bytes : Int
+  max_line_bytes : Int
+} derive(Eq, @debug.Debug)
+pub fn Limits::equal(Self, Self) -> Bool
+pub fn Limits::new(max_active_windows? : Int, max_key_bytes? : Int, max_outputs? : Int, max_snapshot_bytes? : Int, max_line_bytes? : Int) -> Self
+pub fn Limits::not_equal(Self, Self) -> Bool
+pub fn Limits::to_repr(Self) -> @debug.Repr
+
+pub(all) enum StreamError {
+  InvalidConfig
+  InvalidKey
+  TimeOverflow
+  AggregateOverflow
+  WatermarkRegression
+  BudgetExceeded
+  Finished
+  InvalidSnapshot
+  SnapshotVersion
+  ConfigMismatch
+  InvalidInput
+} derive(Eq, @debug.Debug)
+pub fn StreamError::equal(Self, Self) -> Bool
+pub fn StreamError::not_equal(Self, Self) -> Bool
+pub fn StreamError::to_repr(Self) -> @debug.Repr
+
+pub struct WindowId {
+  key : String
+  start_ms : Int64
+  end_ms : Int64
+} derive(Eq, @debug.Debug)
+pub fn WindowId::equal(Self, Self) -> Bool
+pub fn WindowId::not_equal(Self, Self) -> Bool
+pub fn WindowId::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
