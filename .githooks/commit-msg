@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+if ! head -n 1 "$1" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]*\))?!?: .+'; then
+  echo 'Use a Conventional Commit, for example: feat(engine): add windows' >&2
+  exit 1
+fi

@@ -1,15 +1,19 @@
 """Compare five native examples and file replay with hand-written golden outputs."""
 import json
-import os
 from pathlib import Path
 import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SUFFIX = ".exe" if os.name == "nt" else ""
 BUILD = ROOT / "_build/native/debug/build"
-CLI = BUILD / "cmd/mooneventtime" / ("mooneventtime" + SUFFIX)
 NAMES = ["out_of_order_sensor", "multiple_keys", "late_side_output", "boundary_and_negative_time", "snapshot_replay_cli"]
+
+
+def binary(directory, name):
+    return next((p for p in [directory / (name + ".exe"), directory / name] if p.is_file()), directory / (name + ".exe"))
+
+
+CLI = binary(BUILD / "cmd/mooneventtime", "mooneventtime")
 
 
 def records(text):
@@ -27,7 +31,7 @@ def run(*command):
 
 for name in NAMES:
     expected = records((ROOT / "testdata" / (name + ".expected.jsonl")).read_text(encoding="utf-8"))
-    executable = BUILD / "examples" / name / (name + SUFFIX)
+    executable = binary(BUILD / "examples" / name, name)
     actual = run(executable)
     assert actual == expected, (name, actual, expected)
     if name != "snapshot_replay_cli":
