@@ -42,6 +42,18 @@ pub fn Limits::new(max_active_windows? : Int, max_key_bytes? : Int, max_outputs?
 pub fn Limits::not_equal(Self, Self) -> Bool
 pub fn Limits::to_repr(Self) -> @debug.Repr
 
+pub struct Stats {
+  count : Int64
+  sum : Int64
+  min : Int64
+  max : Int64
+} derive(Eq, @debug.Debug)
+pub fn Stats::add(Self, Int64) -> Result[Self, StreamError]
+pub fn Stats::equal(Self, Self) -> Bool
+pub fn Stats::not_equal(Self, Self) -> Bool
+pub fn Stats::single(Int64) -> Self
+pub fn Stats::to_repr(Self) -> @debug.Repr
+
 pub(all) enum StreamError {
   InvalidConfig
   InvalidKey
