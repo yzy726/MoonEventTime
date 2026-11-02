@@ -6,6 +6,7 @@ import {
 }
 
 // Values
+pub fn parse_decimal(StringView) -> Result[Int64, StreamError]
 
 // Errors
 
@@ -31,6 +32,8 @@ pub fn Engine::finish(Self) -> Result[Array[WindowOutput], StreamError]
 pub fn Engine::ingest(Self, Event) -> Result[IngestOutcome, StreamError]
 pub fn Engine::is_finished(Self) -> Bool
 pub fn Engine::new(Config) -> Self
+pub fn Engine::restore(Config, StringView) -> Result[Self, StreamError]
+pub fn Engine::snapshot(Self) -> Result[String, StreamError]
 pub fn Engine::watermark(Self) -> Int64?
 
 pub(all) struct Event {
