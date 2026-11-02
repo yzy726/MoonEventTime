@@ -2,4 +2,6 @@ import {
   "moonbitlang/core/debug",
   "moonbitlang/core/encoding/utf8",
   "moonbitlang/core/immut/sorted_map",
+  "moonbitlang/core/json",
+  "moonbitlang/core/bigint",
 }
