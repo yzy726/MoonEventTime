@@ -2,15 +2,14 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SUFFIX = ".exe" if os.name == "nt" else ""
-BINARY = ROOT / "_build/native/debug/build/cmd/mooneventtime" / ("mooneventtime" + SUFFIX)
+BIN_DIR = ROOT / "_build/native/debug/build/cmd/mooneventtime"
+BINARY = next((path for path in [BIN_DIR / "mooneventtime.exe", BIN_DIR / "mooneventtime"] if path.is_file()), BIN_DIR / "mooneventtime.exe")
 
 
 def event(key, timestamp, value=1):

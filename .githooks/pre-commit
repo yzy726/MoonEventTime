@@ -1,3 +1,17 @@
 #!/bin/sh
-
-moon check
+set -eu
+# Check only; never stage unrelated files or acceptance documents automatically.
+if git diff --cached --name-only --diff-filter=ACM |
+  grep -Eiq '(^|/)(goal|AGENTS)\.md$|ACCEPTANCE[^/]*\.md$|验收[^/]*\.md$'; then
+  echo 'Acceptance Markdown and local agent instructions must remain untracked.' >&2
+  exit 1
+fi
+if git diff --cached --no-ext-diff --unified=0 -- . ':(exclude).githooks/*' |
+  grep -Eq '^\+[^+].*(AKIA[A-Z0-9]{16}|-----BEGIN [A-Z ]*PRIVATE KEY|gh[pouhs]_[A-Za-z0-9]{30,}|sk_live_|xox[baprs]-)'; then
+  echo 'Potential credential detected in staged additions.' >&2
+  exit 1
+fi
+moon fmt --check
+moon check --deny-warn
+moon info
+git diff --exit-code -- '*.mbti'
