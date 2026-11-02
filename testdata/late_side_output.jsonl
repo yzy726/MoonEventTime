@@ -1,0 +1,4 @@
+{"type":"watermark","exclusive_ms":"45000"}
+{"type":"event","key":"a","timestamp_ms":"12000","value":"4"}
+{"type":"watermark","exclusive_ms":"60000"}
+{"type":"event","key":"a","timestamp_ms":"45000","value":"9"}

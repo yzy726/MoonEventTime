@@ -1,0 +1,3 @@
+{"type":"event","key":"sensor-a","timestamp_ms":"59000","value":"21000"}
+{"type":"event","key":"sensor-a","timestamp_ms":"12000","value":"20500"}
+{"type":"watermark","exclusive_ms":"60000"}
