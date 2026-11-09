@@ -29,8 +29,8 @@ jobs:
         if: runner.os == 'Windows'
       - uses: hustcer/setup-moonbit@87e2bdf5cf20d3b6f5c5f266a8a513f503bb5b76 # v1
         with:
-          version: '0.10.14+7d59c7ec9'
-          core-version: '0.10.14+7d59c7ec9'
+          version: '0.10.20+65efd5b93'
+          core-version: '0.10.20+65efd5b93'
       - name: Run the same gates as local development
         run: python scripts/verify.py
       - name: Verify generated interfaces are committed

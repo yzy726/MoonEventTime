@@ -44,6 +44,7 @@ run("moon", "fmt")
 after = {p: p.read_bytes() for p in project_files("*.mbti")}
 assert before == after, "Generated public interfaces changed; review and commit them before verifying again"
 run("moon", "fmt", "--check")
+run(sys.executable, "scripts/docs.py")
 run("moon", "build", "--target", "native", "--deny-warn")
 run(sys.executable, "scripts/e2e.py")
 run(sys.executable, "scripts/examples.py")
