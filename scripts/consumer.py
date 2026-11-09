@@ -9,7 +9,8 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ARCHIVE = ROOT / "_build/publish/Ag108-MoonEventTime-0.1.0.zip"
+VERSION = re.search(r'^version\s*=\s*"([^"]+)"', (ROOT / "moon.mod").read_text(encoding="utf-8"), re.MULTILINE)[1]
+ARCHIVE = ROOT / f"_build/publish/Ag108-MoonEventTime-{VERSION}.zip"
 
 
 def run(*command):
@@ -32,9 +33,10 @@ with zipfile.ZipFile(ARCHIVE) as archive:
         archive.extractall(library)
         # Archives from supported toolchains put moon.mod at their root.
         assert (library / "moon.mod").is_file(), names[:5]
+        run("moon", "-C", library, "doc")
         consumer = workspace / "consumer"
         consumer.mkdir()
-        (consumer / "moon.mod").write_text('name = "local/consumer"\nversion = "0.1.0"\npreferred_target = "wasm-gc"\nimport { "Ag108/MoonEventTime@0.1.0", }\n', encoding="utf-8")
+        (consumer / "moon.mod").write_text(f'name = "local/consumer"\nversion = "0.1.0"\npreferred_target = "wasm-gc"\nimport {{ "Ag108/MoonEventTime@{VERSION}", }}\n', encoding="utf-8")
         (consumer / "moon.pkg").write_text('import { "Ag108/MoonEventTime", } for "test"\n', encoding="utf-8")
         readme = (library / "README.mbt.md").read_text(encoding="utf-8")
         blocks = re.findall(r"```(?:moonbit|mbt)[^\n]*\n(.*?)\n```", readme, re.DOTALL)
@@ -44,4 +46,4 @@ with zipfile.ZipFile(ARCHIVE) as archive:
         run("moon", "-C", workspace, "work", "init")
         run("moon", "-C", workspace, "work", "use", library, consumer)
         run("moon", "-C", consumer, "test", "--target", "wasm-gc", "--deny-warn")
-print("Packaged library consumed from a clean workspace; README passed; private Markdown excluded.")
+print("Packaged library documentation generated; clean consumer and README passed; private Markdown excluded.")

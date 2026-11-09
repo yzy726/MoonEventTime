@@ -12,8 +12,9 @@
 | replay/replay_test.mbt | JSONL、整数精度、行预算、诊断 |
 | scripts/e2e.py | 真实进程、文件、编码、退出码、恢复 |
 | scripts/examples.py | 五个库程序与 CLI 对照手写黄金输出 |
-| scripts/consumer.py | 打包源码、空消费者、README 示例 |
+| scripts/docs.py | 实际执行 moon doc，回归 Mooncakes 文档构建失败 |
+| scripts/consumer.py | 打包源码的文档构建、空消费者、README 示例与私有文件排除 |
 
 参考模型直接枚举小整数窗口，筛选事件列表并计算统计，不复用生产分配函数或到期索引。性质测试中的大量循环断言不机械计为独立场景。数量按命名 test 与实际进程流程报告。
 
-运行 `python scripts/verify.py`，或分别运行格式、三个目标 check/test --deny-warn、moon info、native 构建和各脚本。脚本检查不少于 80 个命名场景、25 个 invalid/edge 场景。只报告实际执行结果；本地通过不等于远程 CI 已运行。
+运行 `python scripts/verify.py`，或分别运行格式、三个目标 check/test --deny-warn、moon info、moon doc、native 构建和各脚本。CI 固定使用已验证的 moonc / core v0.10.20+65efd5b93；更新工具链后需重跑同一组门禁。脚本检查不少于 80 个命名场景、25 个 invalid/edge 场景。只报告实际执行结果；本地通过不等于远程 CI 已运行。
