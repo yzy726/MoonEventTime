@@ -11,11 +11,12 @@ pub fn parse_decimal(StringView) -> Result[Int64, StreamError]
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub struct Config {
   size_ms : Int64
   origin_ms : Int64
   limits : Limits
-} derive(Eq, @debug.Debug)
+}
 pub fn Config::assign(Self, Int64, String) -> Result[WindowId, StreamError]
 pub fn Config::equal(Self, Self) -> Bool
 pub fn Config::new(Int64, origin_ms? : Int64, limits? : Limits) -> Result[Self, StreamError]
@@ -25,7 +26,7 @@ pub fn Config::to_repr(Self) -> @debug.Repr
 pub struct Engine {
   // private fields
 }
-pub fn Engine::active_windows(Self) -> Int
+pub fn Engine::active_windows(Self) -> Int32
 pub fn Engine::advance_watermark(Self, Int64) -> Result[Array[WindowOutput], StreamError]
 pub fn Engine::configuration(Self) -> Config
 pub fn Engine::finish(Self) -> Result[Array[WindowOutput], StreamError]
@@ -36,56 +37,62 @@ pub fn Engine::restore(Config, StringView) -> Result[Self, StreamError]
 pub fn Engine::snapshot(Self) -> Result[String, StreamError]
 pub fn Engine::watermark(Self) -> Int64?
 
+#derive(Eq, @debug.Debug)
 pub(all) struct Event {
   key : String
   timestamp_ms : Int64
   value : Int64
-} derive(Eq, @debug.Debug)
+}
 pub fn Event::equal(Self, Self) -> Bool
 pub fn Event::not_equal(Self, Self) -> Bool
 pub fn Event::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum IngestOutcome {
   Accepted(WindowId)
   Late(LateRecord)
-} derive(Eq, @debug.Debug)
+}
 pub fn IngestOutcome::equal(Self, Self) -> Bool
 pub fn IngestOutcome::not_equal(Self, Self) -> Bool
 pub fn IngestOutcome::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct LateRecord {
   event : Event
   window : WindowId
   reason : String
-} derive(Eq, @debug.Debug)
+}
 pub fn LateRecord::equal(Self, Self) -> Bool
 pub fn LateRecord::not_equal(Self, Self) -> Bool
 pub fn LateRecord::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct Limits {
-  max_active_windows : Int
-  max_key_bytes : Int
-  max_outputs : Int
-  max_snapshot_bytes : Int
-  max_line_bytes : Int
-} derive(Eq, @debug.Debug)
+  max_active_windows : Int32
+  max_key_bytes : Int32
+  max_outputs : Int32
+  max_snapshot_bytes : Int32
+  max_line_bytes : Int32
+}
 pub fn Limits::equal(Self, Self) -> Bool
-pub fn Limits::new(max_active_windows? : Int, max_key_bytes? : Int, max_outputs? : Int, max_snapshot_bytes? : Int, max_line_bytes? : Int) -> Self
+pub fn Limits::new(max_active_windows? : Int32, max_key_bytes? : Int32, max_outputs? : Int32, max_snapshot_bytes? : Int32, max_line_bytes? : Int32) -> Self
 pub fn Limits::not_equal(Self, Self) -> Bool
 pub fn Limits::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct Stats {
   count : Int64
   sum : Int64
   min : Int64
   max : Int64
-} derive(Eq, @debug.Debug)
+}
 pub fn Stats::add(Self, Int64) -> Result[Self, StreamError]
 pub fn Stats::equal(Self, Self) -> Bool
 pub fn Stats::not_equal(Self, Self) -> Bool
 pub fn Stats::single(Int64) -> Self
 pub fn Stats::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum StreamError {
   InvalidConfig
   InvalidKey
@@ -98,24 +105,26 @@ pub(all) enum StreamError {
   SnapshotVersion
   ConfigMismatch
   InvalidInput
-} derive(Eq, @debug.Debug)
+}
 pub fn StreamError::equal(Self, Self) -> Bool
 pub fn StreamError::not_equal(Self, Self) -> Bool
 pub fn StreamError::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct WindowId {
   key : String
   start_ms : Int64
   end_ms : Int64
-} derive(Eq, @debug.Debug)
+}
 pub fn WindowId::equal(Self, Self) -> Bool
 pub fn WindowId::not_equal(Self, Self) -> Bool
 pub fn WindowId::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct WindowOutput {
   window : WindowId
   stats : Stats
-} derive(Eq, @debug.Debug)
+}
 pub fn WindowOutput::equal(Self, Self) -> Bool
 pub fn WindowOutput::not_equal(Self, Self) -> Bool
 pub fn WindowOutput::to_repr(Self) -> @debug.Repr

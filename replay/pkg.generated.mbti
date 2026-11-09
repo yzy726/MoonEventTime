@@ -4,31 +4,33 @@ package "Ag108/MoonEventTime/replay"
 import {
   "Ag108/MoonEventTime",
   "moonbitlang/core/debug",
+  "moonbitlang/core/json",
 }
 
 // Values
-pub fn apply_record(@MoonEventTime.Engine, InputRecord) -> Result[Array[Json], @MoonEventTime.StreamError]
+pub fn apply_record(@MoonEventTime.Engine, InputRecord) -> Result[Array[@json.Json], @MoonEventTime.StreamError]
 
 pub fn error_code(@MoonEventTime.StreamError) -> String
 
-pub fn error_json(@MoonEventTime.StreamError, line? : Int) -> Json
+pub fn error_json(@MoonEventTime.StreamError, line? : Int32) -> @json.Json
 
-pub fn exit_code(@MoonEventTime.StreamError) -> Int
+pub fn exit_code(@MoonEventTime.StreamError) -> Int32
 
-pub fn late_json(@MoonEventTime.LateRecord) -> Json
+pub fn late_json(@MoonEventTime.LateRecord) -> @json.Json
 
 pub fn parse_record(StringView, @MoonEventTime.Limits) -> Result[InputRecord, @MoonEventTime.StreamError]
 
-pub fn window_json(@MoonEventTime.WindowOutput) -> Json
+pub fn window_json(@MoonEventTime.WindowOutput) -> @json.Json
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) enum InputRecord {
   Data(@MoonEventTime.Event)
   Watermark(Int64)
   Finish
-} derive(Eq, @debug.Debug)
+}
 pub fn InputRecord::equal(Self, Self) -> Bool
 pub fn InputRecord::not_equal(Self, Self) -> Bool
 pub fn InputRecord::to_repr(Self) -> @debug.Repr

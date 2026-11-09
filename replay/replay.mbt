@@ -1,10 +1,11 @@
 ///|
 /// JSONL inputs deliberately expose only initial-acceptance operations.
+#derive(Eq, Debug)
 pub(all) enum InputRecord {
   Data(@eventtime.Event)
   Watermark(Int64)
   Finish
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend InputRecord with Eq::{equal, not_equal}
@@ -71,13 +72,13 @@ pub fn window_json(output : @eventtime.WindowOutput) -> Json {
   let s = output.stats
   {
     "type": "window",
-    "key": w.key.to_json(),
-    "start_ms": w.start_ms.to_string().to_json(),
-    "end_ms": w.end_ms.to_string().to_json(),
-    "count": s.count.to_string().to_json(),
-    "sum": s.sum.to_string().to_json(),
-    "min": s.min.to_string().to_json(),
-    "max": s.max.to_string().to_json(),
+    "key": @json.ToJson::to_json(w.key),
+    "start_ms": @json.ToJson::to_json(w.start_ms.to_string()),
+    "end_ms": @json.ToJson::to_json(w.end_ms.to_string()),
+    "count": @json.ToJson::to_json(s.count.to_string()),
+    "sum": @json.ToJson::to_json(s.sum.to_string()),
+    "min": @json.ToJson::to_json(s.min.to_string()),
+    "max": @json.ToJson::to_json(s.max.to_string()),
   }
 }
 
@@ -86,12 +87,12 @@ pub fn window_json(output : @eventtime.WindowOutput) -> Json {
 pub fn late_json(late : @eventtime.LateRecord) -> Json {
   {
     "type": "late",
-    "key": late.event.key.to_json(),
-    "timestamp_ms": late.event.timestamp_ms.to_string().to_json(),
-    "value": late.event.value.to_string().to_json(),
-    "start_ms": late.window.start_ms.to_string().to_json(),
-    "end_ms": late.window.end_ms.to_string().to_json(),
-    "reason": late.reason.to_json(),
+    "key": @json.ToJson::to_json(late.event.key),
+    "timestamp_ms": @json.ToJson::to_json(late.event.timestamp_ms.to_string()),
+    "value": @json.ToJson::to_json(late.event.value.to_string()),
+    "start_ms": @json.ToJson::to_json(late.window.start_ms.to_string()),
+    "end_ms": @json.ToJson::to_json(late.window.end_ms.to_string()),
+    "reason": @json.ToJson::to_json(late.reason),
   }
 }
 
@@ -141,17 +142,17 @@ pub fn error_code(error : @eventtime.StreamError) -> String {
 
 ///|
 /// Minimal diagnostics do not contain raw keys, measurements or input lines.
-pub fn error_json(error : @eventtime.StreamError, line? : Int = 0) -> Json {
+pub fn error_json(error : @eventtime.StreamError, line~ : Int32 = 0) -> Json {
   {
     "type": "error",
-    "code": error_code(error).to_json(),
-    "line": line.to_json(),
+    "code": @json.ToJson::to_json(error_code(error)),
+    "line": @json.ToJson::to_json(line),
   }
 }
 
 ///|
 /// Invalid input/configuration is 2; resource refusal is 3. The I/O adapter uses 4.
-pub fn exit_code(error : @eventtime.StreamError) -> Int {
+pub fn exit_code(error : @eventtime.StreamError) -> Int32 {
   match error {
     @eventtime.BudgetExceeded => 3
     _ => 2

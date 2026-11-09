@@ -1,9 +1,10 @@
 ///|
 /// Window statistics in canonical end, start, UTF-8 key order.
+#derive(Eq, Debug)
 pub struct WindowOutput {
   window : WindowId
   stats : Stats
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WindowOutput with Eq::{equal, not_equal}
@@ -13,11 +14,12 @@ pub extend WindowOutput with @debug.Debug::{to_repr}
 
 ///|
 /// Late data is returned immediately, never retained in an internal queue.
+#derive(Eq, Debug)
 pub struct LateRecord {
   event : Event
   window : WindowId
   reason : String
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend LateRecord with Eq::{equal, not_equal}
@@ -27,10 +29,11 @@ pub extend LateRecord with @debug.Debug::{to_repr}
 
 ///|
 /// Every successful ingest either updates one window or returns a late record.
+#derive(Eq, Debug)
 pub(all) enum IngestOutcome {
   Accepted(WindowId)
   Late(LateRecord)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend IngestOutcome with Eq::{equal, not_equal}
@@ -80,7 +83,7 @@ pub fn Engine::watermark(self : Engine) -> Int64? {
 
 ///|
 /// Count active nonempty windows.
-pub fn Engine::active_windows(self : Engine) -> Int {
+pub fn Engine::active_windows(self : Engine) -> Int32 {
   self.windows.length()
 }
 

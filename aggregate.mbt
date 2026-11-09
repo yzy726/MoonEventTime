@@ -1,11 +1,12 @@
 ///|
 /// Exact statistics for a nonempty window. Every intermediate sum must fit Int64.
+#derive(Eq, Debug)
 pub struct Stats {
   count : Int64
   sum : Int64
   min : Int64
   max : Int64
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Stats with Eq::{equal, not_equal}

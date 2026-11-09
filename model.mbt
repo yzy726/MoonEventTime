@@ -1,5 +1,6 @@
 ///|
 /// Stable, data-free error categories. Raw keys and values are not diagnostics.
+#derive(Eq, Debug)
 pub(all) enum StreamError {
   InvalidConfig
   InvalidKey
@@ -12,26 +13,27 @@ pub(all) enum StreamError {
   SnapshotVersion
   ConfigMismatch
   InvalidInput
-} derive(Eq, Debug)
+}
 
 ///|
 /// Resource limits are checked before committing a state transition.
+#derive(Eq, Debug)
 pub struct Limits {
-  max_active_windows : Int
-  max_key_bytes : Int
-  max_outputs : Int
-  max_snapshot_bytes : Int
-  max_line_bytes : Int
-} derive(Eq, Debug)
+  max_active_windows : Int32
+  max_key_bytes : Int32
+  max_outputs : Int32
+  max_snapshot_bytes : Int32
+  max_line_bytes : Int32
+}
 
 ///|
 /// Construct budgets. Config::new rejects nonpositive values.
 pub fn Limits::new(
-  max_active_windows? : Int = 1024,
-  max_key_bytes? : Int = 256,
-  max_outputs? : Int = 1024,
-  max_snapshot_bytes? : Int = 1048576,
-  max_line_bytes? : Int = 65536,
+  max_active_windows~ : Int32 = 1024,
+  max_key_bytes~ : Int32 = 256,
+  max_outputs~ : Int32 = 1024,
+  max_snapshot_bytes~ : Int32 = 1048576,
+  max_line_bytes~ : Int32 = 65536,
 ) -> Limits {
   {
     max_active_windows,
@@ -44,18 +46,19 @@ pub fn Limits::new(
 
 ///|
 /// Validated tumbling window configuration; milliseconds use signed Int64.
+#derive(Eq, Debug)
 pub struct Config {
   size_ms : Int64
   origin_ms : Int64
   limits : Limits
-} derive(Eq, Debug)
+}
 
 ///|
 /// Create a fixed-width, half-open window configuration.
 pub fn Config::new(
   size_ms : Int64,
-  origin_ms? : Int64 = 0L,
-  limits? : Limits = Limits::new(),
+  origin_ms~ : Int64 = 0L,
+  limits~ : Limits = Limits::new(),
 ) -> Result[Config, StreamError] {
   if size_ms <= 0L ||
     limits.max_active_windows <= 0 ||
@@ -71,11 +74,12 @@ pub fn Config::new(
 
 ///|
 /// A nonempty key and a measurement in a caller-defined fixed unit.
+#derive(Eq, Debug)
 pub(all) struct Event {
   key : String
   timestamp_ms : Int64
   value : Int64
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend StreamError with Eq::{equal, not_equal}
@@ -109,8 +113,9 @@ pub extend WindowId with @debug.Debug::{to_repr}
 
 ///|
 /// Identity of the half-open interval [start_ms, end_ms) for one key.
+#derive(Eq, Debug)
 pub struct WindowId {
   key : String
   start_ms : Int64
   end_ms : Int64
-} derive(Eq, Debug)
+}
