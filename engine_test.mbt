@@ -1,6 +1,6 @@
 ///|
 fn engine(
-  limits? : @MoonEventTime.Limits = @MoonEventTime.Limits::new(),
+  limits~ : @MoonEventTime.Limits = @MoonEventTime.Limits::new(),
 ) -> @MoonEventTime.Engine {
   @MoonEventTime.Engine::new(@MoonEventTime.Config::new(10L, limits~).unwrap())
 }
@@ -8,8 +8,8 @@ fn engine(
 ///|
 fn event(
   t : Int64,
-  value? : Int64 = 1L,
-  key? : String = "a",
+  value~ : Int64 = 1L,
+  key~ : String = "a",
 ) -> @MoonEventTime.Event {
   { key, timestamp_ms: t, value, }
 }

@@ -1,5 +1,5 @@
 ///|
-fn bounds(t : Int64, size : Int64, origin? : Int64 = 0L) -> (Int64, Int64) {
+fn bounds(t : Int64, size : Int64, origin~ : Int64 = 0L) -> (Int64, Int64) {
   let config = @MoonEventTime.Config::new(size, origin_ms=origin).unwrap()
   let w = config.assign(t, "sensor").unwrap()
   (w.start_ms, w.end_ms)

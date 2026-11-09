@@ -4,7 +4,7 @@ fn alter(text : String, field : String, replacement : Json) -> String {
     abort("object expected")
   }
   obj.set(field, replacement)
-  obj.to_json().stringify()
+  @json.ToJson::to_json(obj).stringify()
 }
 
 ///|
@@ -17,7 +17,7 @@ fn alter_entry(text : String, field : String, replacement : Json) -> String {
   }
   guard entries[0] is Object(entry) else { abort("entry expected") }
   entry.set(field, replacement)
-  obj.to_json().stringify()
+  @json.ToJson::to_json(obj).stringify()
 }
 
 ///|
@@ -127,7 +127,8 @@ test "invalid/snapshot duplicate window identities" {
   guard obj.get("windows") is Some(Array(entries)) else { fail("windows") }
   entries.push(entries[0])
   assert_true(
-    restore(obj.to_json().stringify()) is Err(@MoonEventTime.InvalidSnapshot),
+    restore(@json.ToJson::to_json(obj).stringify())
+    is Err(@MoonEventTime.InvalidSnapshot),
   )
 }
 

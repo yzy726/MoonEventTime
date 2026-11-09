@@ -1,13 +1,13 @@
 ///|
 #borrow(path)
-extern "C" fn input_open(path : Bytes) -> Int = "mooneventtime_open"
+extern "C" fn input_open(path : Bytes) -> Int32 = "mooneventtime_open"
 
 ///|
 #borrow(buffer)
-extern "C" fn input_read(buffer : Bytes) -> Int = "mooneventtime_read"
+extern "C" fn input_read(buffer : Bytes) -> Int32 = "mooneventtime_read"
 
 ///|
-extern "C" fn input_close() -> Int = "mooneventtime_close"
+extern "C" fn input_close() -> Int32 = "mooneventtime_close"
 
 ///|
 #borrow(message)
@@ -15,10 +15,10 @@ extern "C" fn stderr(message : Bytes) -> Unit = "mooneventtime_stderr"
 
 ///|
 #borrow(path, data)
-extern "C" fn write_snapshot(path : Bytes, data : Bytes) -> Int = "mooneventtime_write_snapshot"
+extern "C" fn write_snapshot(path : Bytes, data : Bytes) -> Int32 = "mooneventtime_write_snapshot"
 
 ///|
-extern "C" fn process_exit(status : Int) -> Unit = "mooneventtime_exit"
+extern "C" fn process_exit(status : Int32) -> Unit = "mooneventtime_exit"
 
 ///|
 struct Options {
@@ -30,7 +30,7 @@ struct Options {
 }
 
 ///|
-fn positive_int(text : String) -> Int? {
+fn positive_int(text : String) -> Int32? {
   match @eventtime.parse_decimal(text) {
     Ok(n) if n > 0L && n <= 2147483647L => Some(n.to_int())
     _ => None
@@ -143,13 +143,13 @@ fn options(args : Array[String]) -> Options? {
 }
 
 ///|
-fn report(error : @eventtime.StreamError, line? : Int = 0) -> Int {
+fn report(error : @eventtime.StreamError, line~ : Int32 = 0) -> Int32 {
   stderr(@utf8.encode(@replay.error_json(error, line~).stringify()))
   @replay.exit_code(error)
 }
 
 ///|
-fn io_error() -> Int {
+fn io_error() -> Int32 {
   let diagnostic : Json = { "type": "error", "code": "io_error", "line": 0 }
   stderr(@utf8.encode(diagnostic.stringify()))
   4
@@ -159,7 +159,7 @@ fn io_error() -> Int {
 fn read_snapshot(
   path : String,
   config : @eventtime.Config,
-) -> Result[@eventtime.Engine, Int] {
+) -> Result[@eventtime.Engine, Int32] {
   if input_open(cpath(path)) != 0 {
     return Err(io_error())
   }
@@ -193,7 +193,11 @@ fn read_snapshot(
 }
 
 ///|
-fn apply_line(engine : @eventtime.Engine, bytes : Bytes, number : Int) -> Int {
+fn apply_line(
+  engine : @eventtime.Engine,
+  bytes : Bytes,
+  number : Int32,
+) -> Int32 {
   let line = @utf8.decode(bytes) catch {
     _ => return report(@eventtime.InvalidInput, line=number)
   }
@@ -216,7 +220,7 @@ fn apply_line(engine : @eventtime.Engine, bytes : Bytes, number : Int) -> Int {
 }
 
 ///|
-fn replay_file(engine : @eventtime.Engine, path : String) -> Int {
+fn replay_file(engine : @eventtime.Engine, path : String) -> Int32 {
   if input_open(cpath(path)) != 0 {
     return io_error()
   }
@@ -265,7 +269,7 @@ fn replay_file(engine : @eventtime.Engine, path : String) -> Int {
 }
 
 ///|
-fn run(options : Options) -> Int {
+fn run(options : Options) -> Int32 {
   let engine = match options.restore {
     Some(path) =>
       match read_snapshot(path, options.config) {

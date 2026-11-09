@@ -40,13 +40,13 @@ fn Config::fingerprint(self : Config) -> String {
 fn Config::snapshot_json(self : Config) -> Json {
   let l = self.limits
   {
-    "size_ms": self.size_ms.to_string().to_json(),
-    "origin_ms": self.origin_ms.to_string().to_json(),
-    "max_active_windows": l.max_active_windows.to_json(),
-    "max_key_bytes": l.max_key_bytes.to_json(),
-    "max_outputs": l.max_outputs.to_json(),
-    "max_snapshot_bytes": l.max_snapshot_bytes.to_json(),
-    "max_line_bytes": l.max_line_bytes.to_json(),
+    "size_ms": @json.ToJson::to_json(self.size_ms.to_string()),
+    "origin_ms": @json.ToJson::to_json(self.origin_ms.to_string()),
+    "max_active_windows": @json.ToJson::to_json(l.max_active_windows),
+    "max_key_bytes": @json.ToJson::to_json(l.max_key_bytes),
+    "max_outputs": @json.ToJson::to_json(l.max_outputs),
+    "max_snapshot_bytes": @json.ToJson::to_json(l.max_snapshot_bytes),
+    "max_line_bytes": @json.ToJson::to_json(l.max_line_bytes),
   }
 }
 
@@ -130,13 +130,13 @@ pub fn Engine::snapshot(self : Engine) -> Result[String, StreamError] {
   for pair in self.windows.iter() {
     let (id, s) = pair
     let entry : Json = {
-      "key": id.key.to_json(),
-      "start_ms": id.start_ms.to_string().to_json(),
-      "end_ms": id.end_ms.to_string().to_json(),
-      "count": s.count.to_string().to_json(),
-      "sum": s.sum.to_string().to_json(),
-      "min": s.min.to_string().to_json(),
-      "max": s.max.to_string().to_json(),
+      "key": @json.ToJson::to_json(id.key),
+      "start_ms": @json.ToJson::to_json(id.start_ms.to_string()),
+      "end_ms": @json.ToJson::to_json(id.end_ms.to_string()),
+      "count": @json.ToJson::to_json(s.count.to_string()),
+      "sum": @json.ToJson::to_json(s.sum.to_string()),
+      "min": @json.ToJson::to_json(s.min.to_string()),
+      "max": @json.ToJson::to_json(s.max.to_string()),
     }
     let length = @utf8.encode(entry.stringify()).length()
     if length > self.config.limits.max_snapshot_bytes - entry_bytes {
@@ -146,16 +146,16 @@ pub fn Engine::snapshot(self : Engine) -> Result[String, StreamError] {
     entries.push(entry)
   }
   let watermark : Json = match self.watermark_ms {
-    Some(w) => w.to_string().to_json()
+    Some(w) => @json.ToJson::to_json(w.to_string())
     None => Json::null()
   }
   let snapshot : Json = {
     "format_version": 1,
-    "fingerprint": self.config.fingerprint().to_json(),
+    "fingerprint": @json.ToJson::to_json(self.config.fingerprint()),
     "config": self.config.snapshot_json(),
     "watermark_ms": watermark,
-    "finished": self.finished.to_json(),
-    "windows": entries.to_json(),
+    "finished": @json.ToJson::to_json(self.finished),
+    "windows": @json.ToJson::to_json(entries),
   }
   let text = snapshot.stringify()
   if @utf8.encode(text).length() > self.config.limits.max_snapshot_bytes {
