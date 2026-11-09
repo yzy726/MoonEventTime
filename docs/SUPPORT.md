@@ -12,7 +12,7 @@
 | Linux native CLI、远程 CI | 由两系统 CI 验证 | .github/workflows/ci.yml |
 | 空消费者、本地源码包 | 本地验证脚本 | scripts/consumer.py |
 | Mooncakes 文档生成 | 本地与打包源码门禁 | scripts/docs.py、scripts/consumer.py |
-| Mooncakes 版本 | 0.1.0 已发布；0.1.1 为修复候选 | 发布以注册表实际版本为准 |
+| Mooncakes 0.1.1 | 已发布，线上文档构建成功 | [版本文档](https://mooncakes.io/docs/Ag108/MoonEventTime@0.1.1) |
 | 滑动窗、迟到修订、多输入、空闲源 | 未支持 | 无占位 API |
 | 会话窗、去重、连接器、分布式恰好一次 | 未支持 | 属于上层或未来独立设计 |
 
