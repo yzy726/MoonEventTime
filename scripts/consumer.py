@@ -22,7 +22,7 @@ with zipfile.ZipFile(ARCHIVE) as archive:
     for name in names:
         parts = Path(name).parts
         assert ".." not in parts and not name.startswith("/"), name
-        assert not any(p in {"goal.md", "AGENTS.md", ".agent-workplace", ".git", ".mooncakes"} for p in parts), name
+        assert not any(p in {"goal.md", "AGENTS.md", "项目申报书.md", ".agent-workplace", ".git", ".mooncakes"} for p in parts), name
         assert not (name.lower().endswith(".md") and ("acceptance" in name.lower() or "验收" in name)), name
     assert any(name.endswith("cmd/mooneventtime/io.c") for name in names)
     with tempfile.TemporaryDirectory(prefix="mooneventtime-consumer-") as directory:
